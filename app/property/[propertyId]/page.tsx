@@ -18,7 +18,7 @@ const page = async ({ params }: { params: { propertyId: string } }) => {
     return <div>Property not found</div>;
   }
   const userInfos = await getUserInfos(property?.userid);
-  const images: string[] = property?.images[0].split(",");
+  const images = property?.images[0].split(",");
   const bookings = await getBookings(params.propertyId);
 
   return (
