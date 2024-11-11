@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +11,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import type { Property } from "@prisma/client"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { ArrowUpDown } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@/components/ui/dropdown-menu";
+import type { Property } from "@prisma/client";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowUpDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 //const router = useRouter()
 export const columns: ColumnDef<Property>[] = [
   {
@@ -54,12 +54,12 @@ export const columns: ColumnDef<Property>[] = [
           Listing
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const title: string = row.getValue("title")
-      const images = row.original.images
-      const image = images.split(",")
+      const title: string = row.getValue("title");
+      const images = row.original.images;
+      const image = images[0].split(",");
 
       return (
         <div className="flex items-center space-x-3 shrink-0 min-w-[200px]">
@@ -74,7 +74,7 @@ export const columns: ColumnDef<Property>[] = [
             <div className="font-medium line-clamp-2">{title}</div>
           </div>
         </div>
-      )
+      );
     },
   },
 
@@ -93,15 +93,15 @@ export const columns: ColumnDef<Property>[] = [
           Price
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"))
+      const amount = parseFloat(row.getValue("price"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(amount)
-      return <div className="font-medium">{formatted}</div>
+      }).format(amount);
+      return <div className="font-medium">{formatted}</div>;
     },
   },
   {
@@ -119,7 +119,7 @@ export const columns: ColumnDef<Property>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
+      const payment = row.original;
 
       return (
         <DropdownMenu>
@@ -150,7 +150,7 @@ export const columns: ColumnDef<Property>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
