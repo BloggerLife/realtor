@@ -1,28 +1,28 @@
-import React from "react"
-import type { Property } from "@prisma/client"
-import { Swiper, SwiperSlide } from "swiper/react"
+import React from "react";
+import type { Property } from "@prisma/client";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/free-mode"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import "swiper/css/thumbs"
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/thumbs";
 
-import "./styles.css"
+import "./styles.css";
 
 // import required modules
-import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules"
-import Image from "next/image"
-import getLocation from "@/app/utils/getLocation"
-import Link from "next/link"
+import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
+import Image from "next/image";
+import getLocation from "@/app/utils/getLocation";
+import Link from "next/link";
 interface CustomCSSProperties extends React.CSSProperties {
-  "--swiper-navigation-size"?: string
-  "--swiper-pagination-bullet-inactive-opacity"?: string
-  "--swiper-pagination-bullet-size"?: string
+  "--swiper-navigation-size"?: string;
+  "--swiper-pagination-bullet-inactive-opacity"?: string;
+  "--swiper-pagination-bullet-size"?: string;
 }
 const PropertyItem = ({ property }: { property: Property }) => {
-  const { getCountryByCode } = getLocation()
+  const { getCountryByCode } = getLocation();
   return (
     <Link className="flex flex-col gap-3" href={`/property/${property.id}`}>
       <Swiper
@@ -38,7 +38,7 @@ const PropertyItem = ({ property }: { property: Property }) => {
           } as CustomCSSProperties
         }
       >
-        {property.images.split(",").map((image, index) => (
+        {property.images.map((image: string, index: number) => (
           <SwiperSlide className="rounded-xl aspect-square" key={index}>
             <Image
               src={image}
@@ -66,7 +66,7 @@ const PropertyItem = ({ property }: { property: Property }) => {
         </h1>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export default PropertyItem
+export default PropertyItem;
