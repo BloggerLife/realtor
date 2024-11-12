@@ -1,10 +1,10 @@
-"use client"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Property } from "@prisma/client"
-import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import axios from "axios"
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Property } from "@prisma/client";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import axios from "axios";
 import {
   Form,
   FormControl,
@@ -13,7 +13,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -22,18 +22,18 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "./ui/textarea"
-import { Switch } from "./ui/switch"
-import { Input } from "./ui/input"
-import { UploadButton, UploadDropzone } from "./uploadthing"
-import { useToast } from "@/components/ui/use-toast"
-import Image from "next/image"
-import { Button } from "./ui/button"
-import getLocation from "@/app/utils/getLocation"
-import { ICity, IState } from "country-state-city"
-import prismadb from "@/lib/prismadb"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/select";
+import { Textarea } from "./ui/textarea";
+import { Switch } from "./ui/switch";
+import { Input } from "./ui/input";
+import { UploadButton, UploadDropzone } from "./uploadthing";
+import { useToast } from "@/components/ui/use-toast";
+import Image from "next/image";
+import { Button } from "./ui/button";
+import getLocation from "@/app/utils/getLocation";
+import { ICity, IState } from "country-state-city";
+import prismadb from "@/lib/prismadb";
+import { useRouter } from "next/navigation";
 import {
   Bath,
   Bed,
@@ -51,10 +51,10 @@ import {
   Utensils,
   Waves,
   Wifi,
-} from "lucide-react"
+} from "lucide-react";
 
 interface AddPropertyType {
-  property: PropertylType | null
+  property: PropertylType | null;
 }
 
 const categories = [
@@ -67,9 +67,9 @@ const categories = [
   "Cabin",
   "Cottage",
   "Guesthouse",
-]
+];
 
-export type PropertylType = Property
+export type PropertylType = Property;
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "Title must be at least 5 characters" }),
@@ -86,31 +86,31 @@ const formSchema = z.object({
     .string()
     .nonempty({ message: "Guests count is required" })
     .transform((str) => {
-      const parsed = parseInt(str)
+      const parsed = parseInt(str);
       if (isNaN(parsed)) {
-        throw new Error("Guests count must be a number")
+        throw new Error("Guests count must be a number");
       }
-      return parsed
+      return parsed;
     }),
   Bedrooms: z
     .string()
     .nonempty({ message: "Bedrooms count is required" })
     .transform((str) => {
-      const parsed = parseInt(str)
+      const parsed = parseInt(str);
       if (isNaN(parsed)) {
-        throw new Error("Bedrooms count must be a number")
+        throw new Error("Bedrooms count must be a number");
       }
-      return parsed
+      return parsed;
     }),
   Beds: z
     .string()
     .nonempty({ message: "Beds count is required" })
     .transform((str) => {
-      const parsed = parseInt(str)
+      const parsed = parseInt(str);
       if (isNaN(parsed)) {
-        throw new Error("Beds count must be a number")
+        throw new Error("Beds count must be a number");
       }
-      return parsed
+      return parsed;
     }),
   gym: z.boolean().optional(),
   publicPool: z.boolean().optional(),
@@ -122,77 +122,87 @@ const formSchema = z.object({
   roomServices: z.boolean().optional(),
   price: z.union([z.string(), z.number()]).transform((value) => {
     if (typeof value === "string") {
-      const parsed = parseInt(value, 10)
+      const parsed = parseInt(value, 10);
       if (isNaN(parsed)) {
-        throw new Error("Price must be a valid number")
+        throw new Error("Price must be a valid number");
       }
-      return parsed
+      return parsed;
     } else if (typeof value === "number") {
-      return value
+      return value;
     } else {
-      throw new Error("Price must be a valid number")
+      throw new Error("Price must be a valid number");
     }
   }),
-})
+});
 
 const AddPropertyForm = ({ property }: AddPropertyType) => {
-  const [images, setImages] = useState<string[] | undefined>(
-    property?.images.split(",") || undefined
-  )
-  const [states, setStates] = useState<IState[]>([])
-  const [cities, setCities] = useState<ICity[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [imageDeleting, setImageDeleting] = useState(false)
-  const { toast } = useToast()
-  const router = useRouter()
+  const initialImages = property?.images || undefined;
+  const parsedImages = initialImages
+    ? initialImages.join(",").split(",")
+    : undefined;
+  const [images, setImages] = useState<string[] | undefined>(parsedImages);
+  const [states, setStates] = useState<IState[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageDeleting, setImageDeleting] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
   const {
     getAllCountries,
     getCountryByCode,
     getStateByCode,
     getCountryStates,
     getStateCities,
-  } = getLocation()
-  const countries = getAllCountries()
+  } = getLocation();
+  const countries = getAllCountries();
+
+  const defaultPropertyValues = {
+    title: "",
+    description: "",
+    category: "",
+    images: "",
+    country: "",
+    state: "",
+    city: "",
+    locationDescription: "",
+    guests: 1,
+    Bedrooms: 1,
+    Beds: 1,
+    gym: false,
+    publicPool: false,
+    freeWifi: false,
+    restaurant: false,
+    parking: false,
+    noSmoking: false,
+    bathtub: false,
+    roomServices: false,
+    price: 100,
+  };
+
+  // Convert the images array to a single string
+  const defaultImages = property ? property.images.join(",") : "";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: property || {
-      title: "",
-      description: "",
-      category: "",
-      images: "",
-      country: "",
-      state: "",
-      city: "",
-      locationDescription: "",
-      guests: 1,
-      Bedrooms: 1,
-      Beds: 1,
-      gym: false,
-      publicPool: false,
-      freeWifi: false,
-      restaurant: false,
-      parking: false,
-      noSmoking: false,
-      bathtub: false,
-      roomServices: false,
-      price: 100,
-    },
-  })
+    defaultValues: property
+      ? { ...defaultPropertyValues, ...property, images: defaultImages }
+      : defaultPropertyValues,
+  });
+
   useEffect(() => {
-    const country = form.watch("country")
-    const countrystates = getCountryStates(country)
+    const country = form.watch("country");
+    const countrystates = getCountryStates(country);
     if (countrystates) {
-      setStates(countrystates)
+      setStates(countrystates);
     }
-  }, [form.watch("country")])
+  }, [form.watch("country")]);
   useEffect(() => {
-    const currentCountry = form.watch("country")
-    const currentState = form.watch("state")
-    const statecities = getStateCities(currentCountry, currentState)
+    const currentCountry = form.watch("country");
+    const currentState = form.watch("state");
+    const statecities = getStateCities(currentCountry, currentState);
     if (statecities) {
-      setCities(statecities)
+      setCities(statecities);
     }
-  }, [form.watch("country"), form.watch("state")])
+  }, [form.watch("country"), form.watch("state")]);
   useEffect(() => {
     if (images) {
       //cairfull
@@ -200,13 +210,13 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
         shouldValidate: true,
         shouldDirty: true,
         shouldTouch: true,
-      })
+      });
     }
-  }, [images])
+  }, [images]);
 
   const HandleImageDelete = (image: String) => {
-    setImageDeleting(true)
-    const imageKey = image.substring(image.lastIndexOf("/") + 1)
+    setImageDeleting(true);
+    const imageKey = image.substring(image.lastIndexOf("/") + 1);
     axios
       .post("/api/uploadthing/remove", { imageKey })
       .then((res) => {
@@ -214,23 +224,23 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
           toast({
             variant: "success",
             description: "Image deleted successfully",
-          })
-          const newimages = images?.filter((img) => img !== image)
-          setImages(newimages)
+          });
+          const newimages = images?.filter((img) => img !== image);
+          setImages(newimages);
         }
       })
       .catch((err) => {
         toast({
           variant: "destructive",
           description: "Something went wrong",
-        })
+        });
       })
       .finally(() => {
-        setImageDeleting(false)
-      })
-  }
+        setImageDeleting(false);
+      });
+  };
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     if (property) {
       axios
         .patch(`/api/property/${property.id}`, values)
@@ -238,18 +248,18 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
           toast({
             variant: "success",
             description: "Property updated successfully",
-          })
-          router.push(`/dashboard/properties/${property.id}`)
-          setIsLoading(false)
+          });
+          router.push(`/dashboard/properties/${property.id}`);
+          setIsLoading(false);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           toast({
             variant: "destructive",
             description: "Something went wrong",
-          })
-          setIsLoading(false)
-        })
+          });
+          setIsLoading(false);
+        });
     } else {
       axios
         .post("/api/property", values)
@@ -257,18 +267,18 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
           toast({
             variant: "success",
             description: "Property added successfully",
-          })
-          router.push(`/dashboard/properties/${res.data.id}`)
-          setIsLoading(false)
+          });
+          router.push(`/dashboard/properties/${res.data.id}`);
+          setIsLoading(false);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           toast({
             variant: "destructive",
             description: "Something went wrong",
-          })
-          setIsLoading(false)
-        })
+          });
+          setIsLoading(false);
+        });
     }
     //console.log(values)
   }
@@ -640,19 +650,19 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
                           onClientUploadComplete={(res) => {
                             // Do something with the response
                             res.forEach((img) => {
-                              setImages((prev) => [...(prev || []), img.url])
-                            })
+                              setImages((prev) => [...(prev || []), img.url]);
+                            });
                             toast({
                               variant: "success",
                               description: "Image uploaded successfully",
-                            })
+                            });
                           }}
                           onUploadError={(error: Error) => {
                             // Do something with the error.
                             toast({
                               variant: "destructive",
                               description: error.message,
-                            })
+                            });
                           }}
                         />
                       </div>
@@ -852,7 +862,7 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default AddPropertyForm
+export default AddPropertyForm;
