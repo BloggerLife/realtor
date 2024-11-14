@@ -77,7 +77,7 @@ const formSchema = z.object({
     .string()
     .min(10, { message: "Description must be at least 10 characters" }),
   category: z.string().min(1, { message: "Category is required" }),
-  images: z.string().min(1, { message: "Images is required" }),
+  images: z.array(z.string()).nonempty({ message: "Images are required" }), // Define images as an array of strings
   country: z.string().min(1, { message: "Country is required" }),
   state: z.string().optional(),
   city: z.string().optional(),
@@ -136,11 +136,9 @@ const formSchema = z.object({
 });
 
 const AddPropertyForm = ({ property }: AddPropertyType) => {
-  const initialImages = property?.images || undefined;
-  const parsedImages = initialImages
-    ? initialImages.join(",").split(",")
-    : undefined;
-  const [images, setImages] = useState<string[] | undefined>(parsedImages);
+  const [images, setImages] = useState<string[] | undefined>(
+    property?.images[0].split(",") || undefined
+  );
   const [states, setStates] = useState<IState[]>([]);
   const [cities, setCities] = useState<ICity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -155,39 +153,31 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
     getStateCities,
   } = getLocation();
   const countries = getAllCountries();
-
-  const defaultPropertyValues = {
-    title: "",
-    description: "",
-    category: "",
-    images: "",
-    country: "",
-    state: "",
-    city: "",
-    locationDescription: "",
-    guests: 1,
-    Bedrooms: 1,
-    Beds: 1,
-    gym: false,
-    publicPool: false,
-    freeWifi: false,
-    restaurant: false,
-    parking: false,
-    noSmoking: false,
-    bathtub: false,
-    roomServices: false,
-    price: 100,
-  };
-
-  // Convert the images array to a single string
-  const defaultImages = property ? property.images.join(",") : "";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: property
-      ? { ...defaultPropertyValues, ...property, images: defaultImages }
-      : defaultPropertyValues,
+    defaultValues: property || {
+      title: "",
+      description: "",
+      category: "",
+      images: [], // Initialize images as an empty array for multiple strings
+      country: "",
+      state: "",
+      city: "",
+      locationDescription: "",
+      guests: 1,
+      Bedrooms: 1,
+      Beds: 1,
+      gym: false,
+      publicPool: false,
+      freeWifi: false,
+      restaurant: false,
+      parking: false,
+      noSmoking: false,
+      bathtub: false,
+      roomServices: false,
+      price: 100,
+    },
   });
-
   useEffect(() => {
     const country = form.watch("country");
     const countrystates = getCountryStates(country);
@@ -203,10 +193,10 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
       setCities(statecities);
     }
   }, [form.watch("country"), form.watch("state")]);
+
   useEffect(() => {
     if (images) {
-      //cairfull
-      form.setValue("images", images.join(","), {
+      form.setValue("images", [images[0], ...images.slice(1)], {
         shouldValidate: true,
         shouldDirty: true,
         shouldTouch: true,
