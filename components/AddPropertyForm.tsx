@@ -79,6 +79,7 @@ const formSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
   images: z.array(z.string()).nonempty({ message: "Images are required" }), // Define images as an array of strings
   country: z.string().min(1, { message: "Country is required" }),
+  location: z.string().min(1, { message: "Location is required" }),
   state: z.string().optional(),
   city: z.string().optional(),
   locationDescription: z.string().optional(),
@@ -163,6 +164,7 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
       country: "",
       state: "",
       city: "",
+      location: "",
       locationDescription: "",
       guests: 1,
       Bedrooms: 1,
@@ -178,21 +180,6 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
       price: 100,
     },
   });
-  useEffect(() => {
-    const country = form.watch("country");
-    const countrystates = getCountryStates(country);
-    if (countrystates) {
-      setStates(countrystates);
-    }
-  }, [form.watch("country")]);
-  useEffect(() => {
-    const currentCountry = form.watch("country");
-    const currentState = form.watch("state");
-    const statecities = getStateCities(currentCountry, currentState);
-    if (statecities) {
-      setCities(statecities);
-    }
-  }, [form.watch("country"), form.watch("state")]);
 
   useEffect(() => {
     if (images) {
@@ -665,103 +652,17 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
-                  name="country"
+                  name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Select Country *</FormLabel>
+                      <FormLabel>Location *</FormLabel>
                       <FormDescription>
-                        In which country your property is located?
+                        Where is your property located
                       </FormDescription>
-                      <Select
-                        disabled={isLoading}
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder="Select a Country"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {countries.map((country) => (
-                            <SelectItem
-                              key={country.isoCode}
-                              value={country.isoCode}
-                            >
-                              {country.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Select State</FormLabel>
-                      <FormDescription>
-                        In which State your property is located?
-                      </FormDescription>
-                      <Select
-                        disabled={isLoading || states.length < 1}
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder="Select a State"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {states.map((state) => (
-                            <SelectItem
-                              key={state.isoCode}
-                              value={state.isoCode}
-                            >
-                              {state.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Select City</FormLabel>
-                      <FormDescription>
-                        In which City your property is located?
-                      </FormDescription>
-                      <Select
-                        disabled={isLoading || cities.length < 1}
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder="Select a City"
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {cities.map((city) => (
-                            <SelectItem key={city.name} value={city.name}>
-                              {city.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <Input placeholder="Location" {...field} />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
