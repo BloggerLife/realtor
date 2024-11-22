@@ -93,9 +93,11 @@ export default function Home({ searchParams }: Props) {
   return (
     <Container>
       <Link href="/">
-        <h1 className="font-bold text-2xl">
-          <span className="text-foreground">GuestHouse</span>
-          <span className="text-primary">Assist</span>
+        <h1 className="">
+          <span className="font-bold text-2xl text-foreground">GuestHouse</span>
+          <span className="font-bold text-2xl text-primary">Assist</span>
+          <span> </span>
+          <span className="px-2">Your BnB Plug!</span>
         </h1>
       </Link>
       <div className="flex flex-col gap-5 my-10">
