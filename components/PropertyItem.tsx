@@ -55,9 +55,9 @@ const PropertyItem = ({ property }: { property: Property }) => {
         <h1 className="text-base font-semibold line-clamp-1">
           {property.category}
           {` - ${
-            property.city
-              ? property.city
-              : getCountryByCode(property.country)?.name
+            property.location
+              ? property.location
+              : getCountryByCode(property.location)?.name
           }`}
         </h1>
         <p className="text-sm line-clamp-2">{property.title}</p>

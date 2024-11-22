@@ -1,5 +1,5 @@
-import prismadb from "@/lib/prismadb"
-import { NextRequest, NextResponse } from "next/server"
+import prismadb from "@/lib/prismadb";
+import { NextRequest, NextResponse } from "next/server";
 
 // export async function GET(req: NextRequest) {
 //   const page = parseInt(req.nextUrl.searchParams.get("page") || "1") || 1
@@ -22,13 +22,13 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
   try {
-    const { page, limit, searchParams } = await req.json()
+    const { page, limit, searchParams } = await req.json();
 
     // Default values and validation
-    const pageNum = page && Number.isInteger(page) && page > 0 ? page : 1
-    const limitNum = limit && Number.isInteger(limit) && limit > 0 ? limit : 10
+    const pageNum = page && Number.isInteger(page) && page > 0 ? page : 1;
+    const limitNum = limit && Number.isInteger(limit) && limit > 0 ? limit : 10;
 
-    const { title, country, state, city } = searchParams || {}
+    const { title, location, category, priceRange } = searchParams || {};
 
     // Fetch properties with optional filters
     const properties = await prismadb.property.findMany({
@@ -36,15 +36,16 @@ export async function POST(req: NextRequest) {
       take: limitNum,
       where: {
         ...(title && { title: { contains: title } }),
-        ...(country && { country }),
-        ...(state && { state }),
-        ...(city && { city }),
+        ...(location && { location: { contains: location } }),
+        ...(category && { category: { contains: category } }),
+        ...(priceRange && { priceRange: { contains: priceRange } }),
+        // ...(city && { city }),
       },
-    })
+    });
 
-    return NextResponse.json(properties)
+    return NextResponse.json(properties);
   } catch (error) {
-    console.error("Error fetching properties:", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.error("Error fetching properties:", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

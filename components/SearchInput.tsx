@@ -1,37 +1,20 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import { Input } from "./ui/input"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import qs from "query-string"
-import { Search } from "lucide-react"
+"use client";
+import React, { useEffect, useState } from "react";
+import { Input } from "./ui/input";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import qs from "query-string";
+import { Search } from "lucide-react";
 
 const SearchInput = () => {
-  const [value, setValue] = useState("")
-  const pathname = usePathname()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const title = searchParams.get("title")
-  //   useEffect(() => {
-  //     const query = {
-  //       title: value,
-  //     }
-  //     const url = qs.stringifyUrl(
-  //       {
-  //         url: window.location.href,
-  //         query,
-  //       },
-  //       {
-  //         skipNull: true,
-  //         skipEmptyString: true,
-  //       }
-  //     )
-  //     router.push(url)
-  //   }, [value, router])
-
-  const handleSearch = () => {
+  const [value, setValue] = useState("");
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const title = searchParams.get("title");
+  useEffect(() => {
     const query = {
       title: value,
-    }
+    };
     const url = qs.stringifyUrl(
       {
         url: window.location.href,
@@ -41,9 +24,26 @@ const SearchInput = () => {
         skipNull: true,
         skipEmptyString: true,
       }
-    )
-    router.push(url)
-  }
+    );
+    router.push(url);
+  }, [value, router]);
+
+  const handleSearch = () => {
+    const query = {
+      title: value,
+    };
+    const url = qs.stringifyUrl(
+      {
+        url: window.location.href,
+        query,
+      },
+      {
+        skipNull: true,
+        skipEmptyString: true,
+      }
+    );
+    router.push(url);
+  };
   return (
     <div className="w-full max-w-[600px] mx-auto flex items-center gap-4">
       <div className="relative w-full">
@@ -61,7 +61,7 @@ const SearchInput = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SearchInput
+export default SearchInput;

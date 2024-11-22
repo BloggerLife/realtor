@@ -1,6 +1,5 @@
-import getLocation from "@/app/utils/getLocation"
-import { Separator } from "@/components/ui/separator"
-import { Property } from "@prisma/client"
+import { Separator } from "@/components/ui/separator";
+import { Property } from "@prisma/client";
 import {
   Bath,
   CigaretteOff,
@@ -10,23 +9,19 @@ import {
   Utensils,
   Waves,
   Wifi,
-} from "lucide-react"
-import Image from "next/image"
-import React from "react"
+} from "lucide-react";
+import Image from "next/image";
+import React from "react";
 
 interface PropertyDetailsProps {
-  property: Property
-  userInfos?: any
+  property: Property;
+  userInfos?: any;
 }
 const PropertyDetails = ({ property, userInfos }: PropertyDetailsProps) => {
-  const { getCountryByCode, getStateByCode } = getLocation()
   return (
     <div className="mt-10 px-4">
       <h1 className="text-2xl font-medium">
-        {property.category} in {getCountryByCode(property.country)?.name}
-        {property.state &&
-          `, ${getStateByCode(property.country, property.state)?.name}`}
-        {property.city && `, ${property.city}`}
+        {property.category} in {property.location}
       </h1>
       <p className="text-lg">{`${property.guests}  guests - ${property.Bedrooms} bedrooms - ${property.Beds} beds`}</p>
       {userInfos && (
@@ -99,7 +94,7 @@ const PropertyDetails = ({ property, userInfos }: PropertyDetailsProps) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PropertyDetails
+export default PropertyDetails;
