@@ -18,8 +18,8 @@ const page = async ({ params }: { params: { propertyId: string } }) => {
     return <div>Property not found</div>;
   }
   const userInfos = await getUserInfos(property?.userid);
-  const images = property?.images[0].split(",");
   const bookings = await getBookings(params.propertyId);
+  const images = property?.images;
 
   return (
     property && (
@@ -29,7 +29,7 @@ const page = async ({ params }: { params: { propertyId: string } }) => {
         </h1>
         <div className="flex lg:flex-row flex-col gap-5">
           <div className="xl:w-2/3 lg:w-[60%] w-[90%] ">
-            <ImageSlider images={property?.images[0].split(",")} />
+            <ImageSlider images={images} />
             {property && (
               <PropertyDetails property={property} userInfos={userInfos} />
             )}

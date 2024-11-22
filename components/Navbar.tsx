@@ -34,9 +34,9 @@ const Navbarr = () => {
         <Image
           src={"/logo.jpg"}
           alt="Profile"
-          width={50}
-          height={50}
-          className="h-10 w-10 rounded-full"
+          width={90}
+          height={90}
+          className="h-16 w-16 rounded-full"
         />
       </Link>
       <div className="flex flex-row items-center gap-6">

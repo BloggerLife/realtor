@@ -19,7 +19,7 @@ interface PropertyDetailsProps {
 }
 const PropertyDetails = ({ property, userInfos }: PropertyDetailsProps) => {
   return (
-    <div className="mt-10 px-4">
+    <div className="mt-10 mb-10 px-4">
       <h1 className="text-2xl font-medium">
         {property.category} in {property.location}
       </h1>
@@ -28,13 +28,13 @@ const PropertyDetails = ({ property, userInfos }: PropertyDetailsProps) => {
         <div className="flex flex-row gap-5 my-6">
           <Image
             src={userInfos.imageUrl}
-            width={80}
-            height={80}
+            width={40}
+            height={40}
             alt="User Image"
-            className="rounded-full aspect-square w-16 h-16"
+            className="rounded-full aspect-square w-10 h-10"
           />
           <div className="flex flex-col">
-            <p className="text-lg font-medium">{`Hosted by ${userInfos?.firstName} ${userInfos?.lastName}`}</p>
+            <p className="text-sm font-medium">{`Hosted by ${userInfos?.firstName} ${userInfos?.lastName}`}</p>
             <p>Hosting since {`${userInfos?.createdAtDate}`}</p>
           </div>
         </div>

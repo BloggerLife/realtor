@@ -1,24 +1,25 @@
-"use client"
-import React from "react"
-import { Swiper, SwiperSlide } from "swiper/react"
+"use client";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/free-mode"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import "swiper/css/thumbs"
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/thumbs";
 
-import "./styles.css"
-import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules"
-import Image from "next/image"
+import "./styles.css";
+import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
+import Image from "next/image";
 
 interface CustomCSSProperties extends React.CSSProperties {
-  "--swiper-navigation-size"?: string
-  "--swiper-pagination-bullet-inactive-opacity"?: string
-  "--swiper-pagination-bullet-size"?: string
+  "--swiper-navigation-size"?: string;
+  "--swiper-pagination-bullet-inactive-opacity"?: string;
+  "--swiper-pagination-bullet-size"?: string;
 }
 const ImageSlider = ({ images }: { images: string[] }) => {
+  console.log(images[0]);
   return (
     <Swiper
       navigation={true}
@@ -39,15 +40,14 @@ const ImageSlider = ({ images }: { images: string[] }) => {
             <Image
               src={image}
               alt="Property Image"
-              width={2000}
-              height={1000}
-              className="object-cover"
+              layout="fill"
+              objectFit="cover"
             />
           </div>
         </SwiperSlide>
       ))}
     </Swiper>
-  )
-}
+  );
+};
 
-export default ImageSlider
+export default ImageSlider;

@@ -110,12 +110,12 @@ export default function Home({ searchParams }: Props) {
           next={fetchMore}
           hasMore={hasMore}
           loader={
-            <div className="flex justify-center p-4">
-              <LoaderCircle className="animate-spin h-10 w-10 " />
-            </div>
-            // <div>
-            //   <PropertyListSkeleton />
+            // <div className="flex justify-center p-4">
+            //   <LoaderCircle className="animate-spin h-10 w-10 " />
             // </div>
+            <div>
+              <PropertyListSkeleton />
+            </div>
           }
         >
           <PropertiesList properties={properties} />
