@@ -31,10 +31,13 @@ const Navbarr = () => {
       }`}
     >
       <Link href="/">
-        <h1 className="font-bold text-2xl">
-          <span className="text-foreground">GuestHouse</span>
-          <span className="text-primary">Assist</span>
-        </h1>
+        <Image
+          src={"/logo.jpg"}
+          alt="Profile"
+          width={50}
+          height={50}
+          className="h-10 w-10 rounded-full"
+        />
       </Link>
       <div className="flex flex-row items-center gap-6">
         <Link className="hidden md:block" href="/dashboard/properties/new">

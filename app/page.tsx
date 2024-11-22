@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Property } from "@prisma/client";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -91,6 +92,12 @@ export default function Home({ searchParams }: Props) {
   };
   return (
     <Container>
+      <Link href="/">
+        <h1 className="font-bold text-2xl">
+          <span className="text-foreground">GuestHouse</span>
+          <span className="text-primary">Assist</span>
+        </h1>
+      </Link>
       <div className="flex flex-col gap-5 my-10">
         <SearchInput />
         <Filters />
