@@ -239,7 +239,7 @@ const PaymentForm = ({ handleSetPaymentSuccess }: PaymentFormProps) => {
         id="payment-form"
         className="flex-1 mx-10 flex flex-col gap-4"
       >
-        <h2>Billing Address</h2>
+        <h2>Billing Information</h2>
         {/* Add billing address form fields here */}
         <Button disabled={isLoading} type="submit">
           {isLoading ? "Processing..." : "Confirm Booking"}

@@ -1,54 +1,56 @@
-"use client"
-import { Booking, Property } from "@prisma/client"
-import React, { useEffect, useMemo, useState } from "react"
-import { DatePickerWithRange } from "./DateRangePicker"
-import { Button } from "@/components/ui/button"
-import { CalendarCheck2, LoaderCircle } from "lucide-react"
-import { DateRange } from "react-day-picker"
-import { toast } from "@/components/ui/use-toast"
-import useBookProperty from "@/hooks/useBookProperty"
-import { useUser } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
-import { Separator } from "@radix-ui/react-dropdown-menu"
-import { differenceInCalendarDays, eachDayOfInterval } from "date-fns"
+"use client";
+import { Booking, Property } from "@prisma/client";
+import React, { useEffect, useMemo, useState } from "react";
+import { DatePickerWithRange } from "./DateRangePicker";
+import { Button } from "@/components/ui/button";
+import { CalendarCheck2, LoaderCircle } from "lucide-react";
+import { DateRange } from "react-day-picker";
+import { toast } from "@/components/ui/use-toast";
+import useBookProperty from "@/hooks/useBookProperty";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
 
 interface BookingCardProps {
-  property: Property
-  bookings: Booking[]
+  property: Property;
+  bookings: Booking[];
 }
 const BookingCard = ({ property, bookings }: BookingCardProps) => {
-  const [date, setDate] = useState<DateRange | undefined>()
-  const [bookingLoading, setBookingLoading] = useState(false)
-  const [totalPrice, setTotalPrice] = useState(0)
-  const [days, setDays] = useState(1)
-  const { user } = useUser()
-  const router = useRouter()
+  const [date, setDate] = useState<DateRange | undefined>();
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [days, setDays] = useState(1);
+  const { user } = useUser();
+  const router = useRouter();
   const {
     setBookingData,
-    PaymentIntentId,
+    // PaymentIntentId,
     setClientSecret,
     setPaymentIntentId,
-  } = useBookProperty()
+  } = useBookProperty();
+  const PaymentIntentId = user?.id;
+
   const HandleReserve = () => {
     if (!user?.id)
       return toast({
         variant: "destructive",
         description: "Please login first",
-      })
+      });
     if (!property?.userid)
       return toast({
         variant: "destructive",
         description: "Something went wrong",
-      })
+      });
     if (date?.from && date?.to) {
-      setBookingLoading(true)
+      setBookingLoading(true);
       const bookingPropertyData = {
         property,
         startDate: date.from,
         endDate: date.to,
         totalPrice,
-      }
-      setBookingData(bookingPropertyData)
+      };
+      setBookingData(bookingPropertyData);
       fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
@@ -66,54 +68,54 @@ const BookingCard = ({ property, bookings }: BookingCardProps) => {
         }),
       })
         .then((res) => {
-          setBookingLoading(false)
+          setBookingLoading(false);
           if (res.status === 401) {
-            return router.push("/sign-in")
+            return router.push("/sign-in");
           }
-          return res.json()
+          return res.json();
         })
         .then((data) => {
-          setClientSecret(data.paymentIntent.client_secret)
-          setPaymentIntentId(data.paymentIntent.id)
-          router.push("/book-property")
+          // setClientSecret(data.paymentIntent.client_secret);
+          // setPaymentIntentId(data.paymentIntent.id);
+          router.push("/book-property");
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           toast({
             variant: "destructive",
             description: "Something went wrong",
-          })
-        })
+          });
+        });
     } else {
       toast({
         variant: "destructive",
         description: "Please select date",
-      })
+      });
     }
-  }
+  };
   useEffect(() => {
     if (date && date.from && date.to) {
-      const dayCount = differenceInCalendarDays(date.to, date.from)
-      setDays(dayCount)
+      const dayCount = differenceInCalendarDays(date.to, date.from);
+      setDays(dayCount);
       if (dayCount && property && property.price) {
-        setTotalPrice(dayCount * property.price)
+        setTotalPrice(dayCount * property.price);
       }
     }
-  }, [date, property?.price])
+  }, [date, property?.price]);
 
   const disabledDates = useMemo(() => {
-    let dates: Date[] = []
+    let dates: Date[] = [];
     bookings?.forEach((booking) => {
       const range = eachDayOfInterval({
         start: new Date(booking.checkInDate),
         end: new Date(booking.checkOutDate),
-      })
+      });
 
-      dates = [...dates, ...range]
-    })
+      dates = [...dates, ...range];
+    });
 
-    return dates
-  }, [bookings])
+    return dates;
+  }, [bookings]);
   return (
     <div className="flex flex-col gap-5 outline outline-1 outline-border p-5 rounded-lg shadow-lg sticky top-20 right-5">
       <div>
@@ -159,7 +161,7 @@ const BookingCard = ({ property, bookings }: BookingCardProps) => {
         <p>${totalPrice}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BookingCard
+export default BookingCard;

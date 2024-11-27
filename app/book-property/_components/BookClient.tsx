@@ -14,10 +14,10 @@ const BookClient = () => {
 
   return (
     <div className="max-w-[1320px] m-auto">
-      {clientSecret && BookingData && (
+      {BookingData && (
         <div>
           <h1 className="text-xl my-10 mx-10">
-            Complete the payment to confirm the booking
+            Confirm the Booking after Payment
           </h1>
           <PaymentForm handleSetPaymentSuccess={handleSetPaymentSuccess} />
         </div>

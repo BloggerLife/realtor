@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { addDays, format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { DateRange } from "react-day-picker"
+import * as React from "react";
+import { addDays, format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
 interface DateRangePickerProps {
-  className?: string
-  date: DateRange | undefined
-  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>
-  disabledDates?: Date[]
+  className?: string;
+  date: DateRange | undefined;
+  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+  disabledDates?: Date[];
 }
 export function DatePickerWithRange({
   className,
@@ -61,11 +61,11 @@ export function DatePickerWithRange({
             fromDate={new Date()}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
+            numberOfMonths={1}
             disabled={disabledDates}
           />
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }
