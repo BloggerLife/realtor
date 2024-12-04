@@ -1,15 +1,15 @@
-import prismadb from "@/lib/prismadb"
-import { useAuth } from "@clerk/nextjs"
-import { getAuth } from "@clerk/nextjs/server"
-import { NextRequest, NextResponse } from "next/server"
+import prismadb from "@/lib/prismadb";
+import { useAuth } from "@clerk/nextjs";
+import { getAuth } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const { userId } = getAuth(req)
+    const body = await req.json();
+    const { userId } = getAuth(req);
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const property = await prismadb.property.create({
@@ -17,11 +17,11 @@ export async function POST(req: NextRequest) {
         ...body,
         userid: userId,
       },
-    })
-
-    return NextResponse.json(property)
+    });
+    console.log(property);
+    return NextResponse.json(property);
   } catch (error) {
-    console.log(error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.log(error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

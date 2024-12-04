@@ -30,8 +30,6 @@ import { UploadButton, UploadDropzone } from "./uploadthing";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import getLocation from "@/app/utils/getLocation";
-import { ICity, IState } from "country-state-city";
 import prismadb from "@/lib/prismadb";
 import { useRouter } from "next/navigation";
 import {
@@ -78,10 +76,7 @@ const formSchema = z.object({
     .min(10, { message: "Description must be at least 10 characters" }),
   category: z.string().min(1, { message: "Category is required" }),
   images: z.array(z.string()).nonempty({ message: "Images are required" }), // Define images as an array of strings
-  country: z.string().min(1, { message: "Country is required" }),
   location: z.string().min(1, { message: "Location is required" }),
-  state: z.string().optional(),
-  city: z.string().optional(),
   locationDescription: z.string().optional(),
   guests: z
     .string()
@@ -140,20 +135,11 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
   const [images, setImages] = useState<string[] | undefined>(
     property?.images[0].split(",") || undefined
   );
-  const [states, setStates] = useState<IState[]>([]);
-  const [cities, setCities] = useState<ICity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [imageDeleting, setImageDeleting] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const {
-    getAllCountries,
-    getCountryByCode,
-    getStateByCode,
-    getCountryStates,
-    getStateCities,
-  } = getLocation();
-  const countries = getAllCountries();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: property || {
@@ -161,14 +147,11 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
       description: "",
       category: "",
       images: [], // Initialize images as an empty array for multiple strings
-      country: "",
-      state: "",
-      city: "",
       location: "",
       locationDescription: "",
-      guests: 1,
-      Bedrooms: 1,
-      Beds: 1,
+      guests: 0,
+      Bedrooms: 0,
+      Beds: 0,
       gym: false,
       publicPool: false,
       freeWifi: false,
@@ -245,7 +228,7 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
             variant: "success",
             description: "Property added successfully",
           });
-          router.push(`/dashboard/properties/${res.data.id}`);
+          router.push(`/dashboard/properties`);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -257,7 +240,6 @@ const AddPropertyForm = ({ property }: AddPropertyType) => {
           setIsLoading(false);
         });
     }
-    //console.log(values)
   }
   return (
     <div>

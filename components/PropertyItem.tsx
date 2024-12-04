@@ -14,7 +14,6 @@ import "./styles.css";
 // import required modules
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
 import Image from "next/image";
-import getLocation from "@/app/utils/getLocation";
 import Link from "next/link";
 interface CustomCSSProperties extends React.CSSProperties {
   "--swiper-navigation-size"?: string;
@@ -22,7 +21,6 @@ interface CustomCSSProperties extends React.CSSProperties {
   "--swiper-pagination-bullet-size"?: string;
 }
 const PropertyItem = ({ property }: { property: Property }) => {
-  const { getCountryByCode } = getLocation();
   return (
     <Link className="flex flex-col gap-3" href={`/property/${property.id}`}>
       <Swiper
@@ -54,11 +52,7 @@ const PropertyItem = ({ property }: { property: Property }) => {
       <div>
         <h1 className="text-base font-semibold line-clamp-1">
           {property.category}
-          {` - ${
-            property.location
-              ? property.location
-              : getCountryByCode(property.location)?.name
-          }`}
+          {` - ${property.location}`}
         </h1>
         <p className="text-sm line-clamp-2">{property.title}</p>
         <h1 className="text-base font-semibold mt-2">

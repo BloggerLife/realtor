@@ -1,17 +1,17 @@
-"use client"
-import { useAuth, UserButton, useUser } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
-import React from "react"
-import { ModeToggle } from "./ModeToogle"
-import { Button } from "./ui/button"
+"use client";
+import { useAuth, UserButton, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { ModeToggle } from "./ModeToogle";
+import { Button } from "./ui/button";
 
 const Header = () => {
-  const { user, isSignedIn } = useUser()
-  const router = useRouter()
+  const { user, isSignedIn } = useUser();
+  const router = useRouter();
   return (
     <div>
       <div className="flex justify-between py-4">
-        <h1 className="font-bold text-2xl">StayEase</h1>
+        <h1 className="font-bold text-2xl">GuestHouseAssist</h1>
         <div className="flex gap-6">
           <ModeToggle />
           {isSignedIn ? (
@@ -25,7 +25,7 @@ const Header = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

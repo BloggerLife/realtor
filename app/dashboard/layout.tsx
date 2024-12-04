@@ -1,10 +1,10 @@
-import SideBar from "@/components/SideBar"
-import React from "react"
+import SideBar from "@/components/SideBar";
+import React from "react";
 
 export const metadata = {
-  title: "StayEase | Vacation rentals, cabins, beach houses, & more",
-  description: "StayEase | Vacation rentals, cabins, beach houses, & more",
-}
+  title: "Guest House Assist",
+  description: "Guest House Assist | Vacation rentals, cabins, houses, & more",
+};
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
@@ -13,7 +13,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex-1 mr-6 overflow-hidden">{children}</div>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;
